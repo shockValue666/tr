@@ -5,6 +5,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/lib/providers/next-theme-provider";
 import { TransactionContextProvider } from "@/lib/providers/transaction-context-provider";
 import AppStateProvider from "@/lib/providers/state-provider";
+import { Analytics } from "@vercel/analytics/react"
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -31,6 +32,7 @@ export default function RootLayout({
             <TransactionContextProvider>
               <AppStateProvider>
                 {children}
+                <Analytics />
               </AppStateProvider>
             </TransactionContextProvider>
           </ThemeProvider>
