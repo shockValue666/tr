@@ -1,6 +1,9 @@
+"use client";
+import { useEffect, useState } from "react";
 import { Payment, columns } from "./columns"
 import { DataTable } from "./data-table"
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { useAppState } from "@/lib/providers/state-provider";
 
 async function getData() {
   // Fetch data from your API here.
@@ -48,10 +51,23 @@ export const DemoPage:React.FC<DemoPageProps> = ({
   data
 }) => {
   // const data = await getData()
+  const {localData} = useAppState();
 
-  return (
-    <div className="container mx-auto py-10">
-      <DataTable columns={columns} data={data} />
-    </div>
-  )
+  useEffect(()=>{
+    console.log("localData from payments: ",localData, "generally data: ",data)
+  },[localData])
+
+  if(localData.length!==0){
+    return (
+      <div className="container mx-auto py-10">
+        <DataTable columns={columns} data={data} />
+      </div>
+    )
+  }else{
+    return (
+      <div className="container mx-auto py-10">
+        loading...
+      </div>
+    )
+  }
 }

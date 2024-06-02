@@ -6,6 +6,10 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { FaArrowAltCircleRight, FaArrowCircleRight } from "react-icons/fa";
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 
+import {timeAgo} from "@/lib/utils"
+import Image from 'next/image'
+import dex from '../../../public/dexlogo.png'
+
 
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip"
 
@@ -80,6 +84,11 @@ export const columns: ColumnDef<Payment>[] = [
         </Button>
       )
     },
+    cell: ({ row }) => {
+      return (
+        <div className="text-xl md:text-md text-center">{timeAgo(row.getValue("created_at"))}</div>
+      )
+    }
   },
   {
     accessorKey: "swapper_address",
@@ -120,7 +129,14 @@ export const columns: ColumnDef<Payment>[] = [
                   {/* <Button variant="outline"> */}
                   <div onClick={()=>{console.log("clicked");}}> 
                     {/* Copy to Clipboard <FaArrowCircleRight className="ml-2 h-4 w-4" /> */}
-                    {row.getValue("token_in_symbol")}
+                    {/* {row.getValue("token_in_symbol")} */}
+                    <CopyToClipboard text={row.getValue("token_in_mint")}
+                      onCopy={() => 
+                        // this.setState({copied: true})
+                        console.log("NEVER COPE?", row.getValue("token_in_mint"))
+                      }>
+                      <span>{formatTxId(row.getValue("token_in_symbol"))}</span>
+                    </CopyToClipboard>
                   </div>
                   {/* </Button> */}
                 </TooltipTrigger>
@@ -130,9 +146,15 @@ export const columns: ColumnDef<Payment>[] = [
               </Tooltip>
             </TooltipProvider>
           </div>
+          <a href={`https://dexscreener.com/solana/${row.getValue("token_in_mint")}?maker=${row.getValue("swapper_address")}`} target="_blank">
+            {/* {row.getValue("token_in_mint")} */}
+            <div className="flex justify-center gap-x-2 items-center">
+              <FaArrowAltCircleRight />
+              {/* maker */}
+            </div>
+          </a>
           <a href={`https://dexscreener.com/solana/${row.getValue("token_in_mint")}`} target="_blank">
-            {row.getValue("token_in_mint")}
-            <FaArrowAltCircleRight />
+            <Image src={dex} width={30} height={30} alt="some shit"/>
           </a>
         </div>
       )
@@ -164,9 +186,33 @@ export const columns: ColumnDef<Payment>[] = [
     },
     cell: ({ row }) => {
       return (
-        <div className="text-xl md:text-md text-center">
-          <a href={`https://dexscreener.com/solana/${row.getValue("token_in_mint")}`} target="_blank">
-            {formatTxId(row.getValue("token_in_mint"))}
+        <div className="text-xl md:text-md text-center flex justify-center items-center gap-x-2">
+          <div className="hover:text-gray-400 cursor-pointer">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    {/* <Button variant="outline"> */}
+                    <div onClick={()=>{console.log("clicked");}}> 
+                      {/* Copy to Clipboard <FaArrowCircleRight className="ml-2 h-4 w-4" /> */}
+                      {/* {row.getValue("token_in_symbol")} */}
+                      <CopyToClipboard text={row.getValue("token_in_mint")}
+                        onCopy={() => 
+                          // this.setState({copied: true})
+                          console.log("NEVER COPE?", row.getValue("token_int_mint"))
+                        }>
+                        <span>{formatTxId(row.getValue("token_in_mint"))}</span>
+                      </CopyToClipboard>
+                    </div>
+                    {/* </Button> */}
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p className="text-white">Click to copy</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+          <a href={`https://solscan.io/account/${row.getValue("token_in_mint")}`} target="_blank">
+            <FaArrowAltCircleRight />
           </a>
         </div>
       )
@@ -188,11 +234,42 @@ export const columns: ColumnDef<Payment>[] = [
     },
     cell: ({ row }) => {
       return (
-        <div className="text-xl md:text-md text-center">
-          <a href={`https://dexscreener.com/solana/${row.getValue("token_out_mint")}`} target="_blank">
-            {row.getValue("token_out_symbol")}
+          <div className="text-xl md:text-md text-center flex justify-center items-center gap-x-2">
+            <div className="hover:text-gray-400 cursor-pointer">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    {/* <Button variant="outline"> */}
+                    <div onClick={()=>{console.log("clicked");}}> 
+                      {/* Copy to Clipboard <FaArrowCircleRight className="ml-2 h-4 w-4" /> */}
+                      {/* {row.getValue("token_in_symbol")} */}
+                      <CopyToClipboard text={row.getValue("token_out_mint")}
+                        onCopy={() => 
+                          // this.setState({copied: true})
+                          console.log("NEVER COPE?", row.getValue("token_out_mint"))
+                        }>
+                        <span>{formatTxId(row.getValue("token_out_symbol"))}</span>
+                      </CopyToClipboard>
+                    </div>
+                    {/* </Button> */}
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p className="text-white">Click to copy</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+            <a href={`https://dexscreener.com/solana/${row.getValue("token_out_mint")}?maker=${row.getValue("swapper_address")}`} target="_blank">
+            {/* {row.getValue("token_out_mint")} */}
+            <div className="flex justify-center gap-x-2 items-center">
+              <FaArrowAltCircleRight />
+              {/* maker */}
+            </div>
           </a>
-        </div>
+          <a href={`https://dexscreener.com/solana/${row.getValue("token_out_mint")}`} target="_blank">
+            <Image src={dex} width={30} height={30} alt="some shit"/>
+          </a>
+          </div>
       )
     }
   },
