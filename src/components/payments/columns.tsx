@@ -135,7 +135,7 @@ export const columns: ColumnDef<Payment>[] = [
                         // this.setState({copied: true})
                         console.log("NEVER COPE?", row.getValue("token_in_mint"))
                       }>
-                      <span>{formatTxId(row.getValue("token_in_symbol"))}</span>
+                      <span>{row.getValue("token_in_symbol")}</span>
                     </CopyToClipboard>
                   </div>
                   {/* </Button> */}
