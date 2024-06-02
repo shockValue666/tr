@@ -22,7 +22,7 @@ export type NewCopyTradingTransaction = {
 
 }
 
-export const calculatePnl = async () => {
+const calculatePnl = async () => {
     const supabase = createClientComponentClient();
     const {data, error} = await supabase.from('new_copy_trading_transaction')
         .select('token_in_amount, token_out_amount, price_per_token')
