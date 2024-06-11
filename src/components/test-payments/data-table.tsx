@@ -45,6 +45,10 @@ export function DataTable<TData, TValue>({
   data,
 }: DataTableProps<TData, TValue>) {
 
+    // if(data){
+    //     console.log("data from the shit : ",data)
+    // }
+
 const [sorting, setSorting] = useState<SortingState>([])
 const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
@@ -80,9 +84,17 @@ const supabase = createClientComponentClient();
         event:"INSERT",
         schema:"public",
         table:"new_copy_trading_transaction"
-    }, (payload) => {
+    }, async (payload) => {
         console.log("payload: ", payload)
-        setUpdatedData(oldData => [payload.new as TData,...oldData])
+        // setUpdatedData(oldData => [payload.new as TData,...oldData])
+        // const {data:newRowData,error:newRowError} = await supabase.from('new_copy_trading_transaction').select('*,new_copy_trading_addresses(*)').eq('id',payload.new.id).single()
+        const {data:newRowData,error:newRowError} = await supabase.from('new_copy_trading_transaction').select('*,new_copy_trading_addresses(*),new_copy_trading_coins_of_owners(*)').eq('id',payload.new.id).single()
+        if(newRowData){
+            console.log("newrowdata: ", newRowData)
+            setUpdatedData(oldData => [newRowData as TData,...oldData])
+        }else{
+            console.log("error trying to fetch the new row from data-table.tsx", newRowError)
+        }
     }).subscribe()
 
     return () => {
@@ -91,22 +103,27 @@ const supabase = createClientComponentClient();
   },[supabase])
 
   useEffect(()=>{
+    console.log("data: ",data)
+  },[data])
 
-    const fetchDataInitial = async () => {
-        const {data, error} = await supabase.from('new_copy_trading_transaction')
-            .select('*')
-            .order('created_at', { ascending: false })
-            .limit(200);
-        if(error || !data){
-            console.log("error", error)
-        }
-        if(data){
-            console.log("data from my huge cock",data)
-            return data;
-        }
-    }
-    fetchDataInitial();
-  },[])
+//   useEffect(()=>{
+
+
+//     const fetchDataInitial = async () => {
+//         const {data, error} = await supabase.from('new_copy_trading_transaction')
+//             .select('*')
+//             .order('created_at', { ascending: false })
+//             .limit(200);
+//         if(error || !data){
+//             console.log("error", error)
+//         }
+//         if(data){
+//             // console.log("data from my huge cock",data)
+//             return data;
+//         }
+//     }
+//     fetchDataInitial();
+//   },[])
 
   return (
     <div>

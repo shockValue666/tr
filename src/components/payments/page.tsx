@@ -17,7 +17,7 @@ async function getData() {
       console.log("error", error)
   }
   if(data){
-      console.log("data from my cock",data)
+      // console.log("data from my cock",data)
       return data;
   }
   
@@ -47,7 +47,7 @@ interface DemoPageProps{
   data:any[]
 }
 
-export const DemoPage:React.FC<DemoPageProps> = ({
+export const DemoPage:React.FC<DemoPageProps> = async ({
   data
 }) => {
   // const data = await getData()

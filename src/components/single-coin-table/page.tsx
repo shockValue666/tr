@@ -1,0 +1,81 @@
+import { createClientComponentClient, createServerComponentClient } from "@supabase/auth-helpers-nextjs"
+import { Payment, columns } from "./columns"
+import { DataTable } from "./data-table"
+import { cookies } from "next/headers"
+
+interface DemoSinglePageProps {
+  address: string
+}
+
+
+async function getTransactionsPerCoin(address:string): Promise<any>{
+  let transactionsPerCoin:any[]=[];
+  const supabase = createServerComponentClient({cookies})
+  const {data:addressIdData,error:addressIdError} = await supabase.from("new_copy_trading_addresses")
+    .select("id")
+    .eq("swapper_address", address)
+    .limit(1)
+
+  if(addressIdError || !addressIdData){
+    throw new Error("Failed to get addressId")
+  }
+  else if(addressIdData && addressIdData[0] && addressIdData[0].id){
+    //fetch all coins related to that id
+    const {data:addressesData,error:addressesError} = await supabase.from("new_copy_trading_coins_of_owners")
+      .select("*")
+      .eq("owner", addressIdData[0].id)
+
+    if(addressesError || !addressesData){
+      throw new Error("Failed to get addresses")
+    }
+    else if(addressesData && addressesData[0] && addressesData[0].id){
+      //find all transactions related to those coins and the owner address
+      const coinIds = addressesData.map((address)=>{
+        return address.id;
+      })
+      
+      const transactionPromises = coinIds.map(async (coinId)=>{
+        const {data:transactionsData,error:transactionsError} = await supabase.from("new_copy_trading_transaction")
+          .select("*, new_copy_trading_addresses ( * ), new_copy_trading_coins_of_owners ( * )")
+          .eq("token_id", coinId)
+          .eq("swapper_address", address)
+        if(transactionsError || !transactionsData){
+          throw new Error("Failed to get transactions")
+        }else if(transactionsData){
+          // console.log("transactionsData: ",transactionsData)
+          transactionsPerCoin.push({coinId:coinId,transactions:transactionsData})
+          return {coinId:coinId,transactions:transactionsData,tokenSymbol:transactionsData[0].new_copy_trading_coins_of_owners.token_symbol}
+        }
+      })
+      transactionsPerCoin = await Promise.all(transactionPromises)
+      // console.log("here: ", transactionsPerCoin)
+      return transactionsPerCoin
+    }
+  }
+}
+
+async function getData(address:string): Promise<any> {
+  const answer = await getTransactionsPerCoin(address);
+  // console.log("answer: ",answer)
+  return answer;
+  
+}
+
+export const DemoSinglePage: React.FC<DemoSinglePageProps> = async ({address}) => {
+  const data = await getData(address);
+  console.log("data from inside the page: ",data)
+
+  return (
+    <>
+      <div className="container mx-auto py-10">
+        {/* <DataTable columns={columns} data={data} /> */}
+        {data.map((d:any)=>{
+          return (
+            <DataTable columns={columns} data={d.transactions} key={d.coinId} addressTitle={d.tokenSymbol}/>
+          )
+        })}
+        {address}
+      </div>
+    </>
+  );
+};

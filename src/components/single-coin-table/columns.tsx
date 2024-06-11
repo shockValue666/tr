@@ -121,7 +121,6 @@ import dex from '../../../public/dexlogo.png'
 
 
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip"
-import Link from "next/link"
 
 
 
@@ -215,11 +214,7 @@ export const columns: ColumnDef<any>[] = [
                 // this.setState({copied: true})
                 console.log("cope?")
               }>
-              <span>
-                <Link href={`/address/${row.getValue("swapper_address")}`}>
-                  {formatTxId(row.getValue("swapper_address"))}
-                </Link>
-              </span>
+              <span>{formatTxId(row.getValue("swapper_address"))}</span>
             </CopyToClipboard>
 
   

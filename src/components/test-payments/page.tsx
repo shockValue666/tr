@@ -16,15 +16,39 @@ async function getData(): Promise<any[]> {
   //   // ...
   // ]
   const supabase = createServerComponentClient({cookies})
-  const {data,error} = await supabase.from('new_copy_trading_transaction')
-                              .select('*')
-                              .order('created_at', { ascending: false })
-                              .limit(200);
+  // const {data,error} = await supabase.from('new_copy_trading_transaction')
+  //                             .select('*')
+  //                             .order('created_at', { ascending: false })
+  //                             .limit(200);
+  // const { data, error } = await supabase
+  //                                 .from('new_copy_trading_transaction')
+  //                                 .select(`
+  //                                   *,
+  //                                   new_copy_trading_addresses ( swapper_description )
+  //                                 `)
+  //                                 .eq('new_copy_trading_addresses.swapper_address', 'new_copy_trading_transaction.swapper_address')
+  //                                 .order('created_at', { ascending: false })
+  //                                 .limit(200);
+  const { data, error } = await supabase
+  .from('new_copy_trading_transaction')
+  .select(`
+    *,
+    new_copy_trading_addresses(
+      *,
+      new_copy_trading_coins_of_owners!owner(
+        *
+      )
+    )
+  `)
+  // .eq('new_copy_trading_transaction.swapperAddressId', 'new_copy_trading_addresses.id')
+  .order('created_at', { ascending: false })
+  .limit(200);
   if(error || !data){
       console.log("error", error)
       return []
   }else if(data){
-      console.log("data from cock: ",data)
+      // console.log("data from cock: ",data)
+      console.log("data found")
       return data;
   }else{
     console.log("some other error");
