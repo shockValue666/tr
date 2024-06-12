@@ -34,6 +34,7 @@ async function getTransactionsPerCoin(address:string): Promise<any>{
         return address.id;
       })
       
+      let totalPnl = 0
       const transactionPromises = coinIds.map(async (coinId)=>{
         const {data:transactionsData,error:transactionsError} = await supabase.from("new_copy_trading_transaction")
           .select("*, new_copy_trading_addresses ( * ), new_copy_trading_coins_of_owners ( * )")
@@ -57,12 +58,13 @@ async function getTransactionsPerCoin(address:string): Promise<any>{
           // console.log("t: amount bought: ",t.amount_bought_in_usdc, " amount_sold: " ,t.amount_sold_in_usdc, "singleCoinBoughtOrSoldFoRSingleCoin" ,singleCoinBoughtOrSoldFoRSingleCoin, "tokenSymbol: ",t.new_copy_trading_coins_of_owners.token_symbol)
         })
         // console.log("singleCoinBoughtOrSoldFoRSingleCoinPnl: ",-singleCoinBoughtOrSoldFoRSingleCoin)
+        totalPnl += -singleCoinBoughtOrSoldFoRSingleCoin
         return {pnl: -singleCoinBoughtOrSoldFoRSingleCoin,symbol:tsss.tokenSymbol};
         singleCoinBoughtOrSoldFoRSingleCoin=0;
       })
 
-      console.log("someshit: ",someshit)
-      return {transactionsPerCoin,someshit}
+      // console.log("someshit: ",someshit)
+      return {transactionsPerCoin,someshit,totalPnl}
     }
   }
 }
@@ -82,6 +84,9 @@ export const DemoSinglePage: React.FC<DemoSinglePageProps> = async ({address}) =
   return (
     <>
       <div className="container mx-auto py-10">
+        <div>
+          totalPnl: {data.totalPnl.toFixed(2)}
+        </div>
         {/* <DataTable columns={columns} data={data} /> */}
         {data.transactionsPerCoin.map((d:any)=>{
           // let pnl=0;
