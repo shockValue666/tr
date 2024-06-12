@@ -49,29 +49,47 @@ async function getTransactionsPerCoin(address:string): Promise<any>{
       })
       transactionsPerCoin = await Promise.all(transactionPromises)
       // console.log("here: ", transactionsPerCoin)
-      return transactionsPerCoin
+      let someshit = transactionsPerCoin.map((tsss:any)=>{
+        // console.log("ts: ",tsss.tokenSymbol)
+        let singleCoinBoughtOrSoldFoRSingleCoin=0
+        tsss.transactions.map((t:any)=>{
+          singleCoinBoughtOrSoldFoRSingleCoin += t.amount_sold_in_usdc === 0 ? t.amount_bought_in_usdc : -t.amount_sold_in_usdc
+          // console.log("t: amount bought: ",t.amount_bought_in_usdc, " amount_sold: " ,t.amount_sold_in_usdc, "singleCoinBoughtOrSoldFoRSingleCoin" ,singleCoinBoughtOrSoldFoRSingleCoin, "tokenSymbol: ",t.new_copy_trading_coins_of_owners.token_symbol)
+        })
+        // console.log("singleCoinBoughtOrSoldFoRSingleCoinPnl: ",-singleCoinBoughtOrSoldFoRSingleCoin)
+        return {pnl: -singleCoinBoughtOrSoldFoRSingleCoin,symbol:tsss.tokenSymbol};
+        singleCoinBoughtOrSoldFoRSingleCoin=0;
+      })
+
+      console.log("someshit: ",someshit)
+      return {transactionsPerCoin,someshit}
     }
   }
 }
 
 async function getData(address:string): Promise<any> {
   const answer = await getTransactionsPerCoin(address);
-  // console.log("answer: ",answer)
+  const {transactionsPerCoin,someshit} = answer;
+  console.log("answer: ",answer.transactionsPerCoin)
   return answer;
   
 }
 
 export const DemoSinglePage: React.FC<DemoSinglePageProps> = async ({address}) => {
   const data = await getData(address);
-  console.log("data from inside the page: ",data)
+  // console.log("data from inside the page: ",data)
 
   return (
     <>
       <div className="container mx-auto py-10">
         {/* <DataTable columns={columns} data={data} /> */}
-        {data.map((d:any)=>{
+        {data.transactionsPerCoin.map((d:any)=>{
+          // let pnl=0;
+          // d.transactions.forEach((t:any)=>{
+          //   console.log("t: ",t)
+          // })
           return (
-            <DataTable columns={columns} data={d.transactions} key={d.coinId} addressTitle={d.tokenSymbol}/>
+            <DataTable columns={columns} data={d.transactions} key={d.coinId} addressTitle={d.tokenSymbol} pnl={data.someshit}/>
           )
         })}
         {address}

@@ -33,13 +33,18 @@ import { useState } from "react"
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[],
-  addressTitle: string
+  addressTitle: string,
+  pnl:{
+    pnl:number,
+    symbol:string
+  }[]
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
-  addressTitle
+  addressTitle,
+  pnl
 }: DataTableProps<TData, TValue>) {
 
   const [sorting, setSorting] = useState<SortingState>([])
@@ -69,9 +74,29 @@ export function DataTable<TData, TValue>({
     },
   })
 
+  // console.log("pnl: ",pnl)
+
   return (
     <div>
-      {addressTitle}
+      <div>
+        {/* {addressTitle} */}
+      </div>
+      <div>
+        {/* pnl: {pnl[0].pnl} */}
+        {
+          // pnl.map(({pnl,symbol}:{pnl:number,symbol:string})=>{
+          //   // console.log("data: ",(data[0] as any).new_copy_trading_coins_of_owners.token_symbol)
+          //   // if(symbol === (data[0] as any).new_copy_trading_coins_of_owners.token_symbol){
+          //   //   return <div>symbol: {symbol} : pnl: {pnl}</div>
+          //   // }
+          //   return <div>{symbol} : {pnl}</div>
+          // })
+        }
+        {pnl.map(({pnl,symbol})=>{
+          if(symbol === addressTitle)
+          return <div key={pnl}>symbol {symbol} : pnl {pnl.toFixed(2)} USDC</div>
+        })}
+      </div>
       <div className="flex-1 text-sm text-muted-foreground">
         {table.getFilteredSelectedRowModel().rows.length} of{" "}
         {table.getFilteredRowModel().rows.length} row(s) selected.

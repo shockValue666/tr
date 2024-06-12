@@ -30,10 +30,10 @@ export default function RootLayout({
           >
 
             <TransactionContextProvider>
-              <AppStateProvider>
+              {/* <AppStateProvider> */}
                 {children}
                 <Analytics />
-              </AppStateProvider>
+              {/* </AppStateProvider> */}
             </TransactionContextProvider>
           </ThemeProvider>
       </body>
