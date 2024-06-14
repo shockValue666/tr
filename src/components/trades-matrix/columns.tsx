@@ -16,33 +16,6 @@ import { columnHeaderTextStyle } from "@/lib/constants"
 import { useAppState } from "@/lib/providers/state-provider"
 
 
-const SelectCell = ({ row } : {row:any}) => {
-  const { selectedTransactions, dispatch } = useAppState();
-
-  return (
-    <>
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => {
-          row.toggleSelected(!!value);
-          console.log("here pressed this:", value);
-          if (value === true) {
-            dispatch({
-              type: "UPDATE_SELECTED_TRANS",
-              payload: [...selectedTransactions, row.original],
-            });
-          } else if (value === false) {
-            dispatch({
-              type: "UPDATE_SELECTED_TRANS",
-              payload: selectedTransactions.filter((item) => item.id !== row.original.id),
-            });
-          }
-        }}
-        aria-label="Select row"
-      />
-    </>
-  );
-};
 
 const formatTxId = (txId: string) => {
   if (txId.length <= 6) {
@@ -64,47 +37,39 @@ export type Payment = {
 }
 
 export const columns: ColumnDef<any>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value: any) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    // cell: ({ row }) => {
-    //   const {selectedTransactions,dispatch} = useAppState();
-    //   // console.log("selectedTransactions: ",selectedTransactions)
-    //   return (
-    //     <>
-    //     here
-    //     <Checkbox
-    //       checked={row.getIsSelected()}
-    //       onCheckedChange={(value: any) => {row.toggleSelected(!!value);console.log("here pressed this shit: ",value);
-    //       if(value===true){
-    //           dispatch({
-    //             type:"UPDATE_SELECTED_TRANS",
-    //             payload:[...selectedTransactions,row.original]
-    //           })
-    //       } else if (value===false) {
-    //         dispatch({
-    //           type:"UPDATE_SELECTED_TRANS",
-    //           payload:selectedTransactions.filter((item: any) => item.id !== row.original.id)
-    //         })  
-    //       }
-    //       }}
-    //       aria-label="Select row"
-    //     />
-    //     </>
-    // )},
-    cell:SelectCell,
-    enableSorting: false,
-    enableHiding: false,
-  },
+//   {
+//     id: "select",
+//     header: ({ table }) => (
+//       <Checkbox
+//         checked={
+//           table.getIsAllPageRowsSelected() ||
+//           (table.getIsSomePageRowsSelected() && "indeterminate")
+//         }
+//         onCheckedChange={(value: any) => table.toggleAllPageRowsSelected(!!value)}
+//         aria-label="Select all"
+//       />
+//     ),
+//     cell: ({ row }) => {
+//       const {selectedTransactions,dispatch} = useAppState();
+//       // console.log("selectedTransactions: ",selectedTransactions)
+//       return (
+//         <>
+//         here
+//         <Checkbox
+//           checked={row.getIsSelected()}
+//           onCheckedChange={(value: any) => {row.toggleSelected(!!value);console.log("here pressed this shit: ",row.getValue("tx_id"));
+//             dispatch({
+//               type:"UPDATE_SELECTED_TRANS",
+//               payload:[...selectedTransactions,row.original]
+//             })
+//           }}
+//           aria-label="Select row"
+//         />
+//         </>
+//     )},
+//     enableSorting: false,
+//     enableHiding: false,
+//   },
   {
     accessorKey: "created_at",
     header: ({ column }) => {

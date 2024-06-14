@@ -3,6 +3,7 @@ import { Payment, columns } from './columns'
 import { DataTable } from "./data-table"
 import { cookies } from 'next/headers'
 import { Modal } from '../modal/modal';
+import { useAppState } from '@/lib/providers/state-provider';
 // import { getDataTwo } from "@/lib/constants";
 // import { getDataTwo } from "@/lib/constants";
 
@@ -58,8 +59,11 @@ async function getData(): Promise<any[]> {
     }
 }
 
-export default async function NewMatrix() {
+export default async function MatrixOfTrades() {
   const data = await getData();
+//   const { selectedTransactions } = useAppState()
+//   console.log("selectedTransactions: ", selectedTransactions);
+  
 
   return (
     <div className="container mx-auto py-10">

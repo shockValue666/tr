@@ -31,11 +31,11 @@ export default function RootLayout({
           >
 
             <TransactionContextProvider>
-              {/* <AppStateProvider> */}
+              <AppStateProvider>
                 {children}
                 <Analytics />
                 <Toaster/>
-              {/* </AppStateProvider> */}
+              </AppStateProvider>
             </TransactionContextProvider>
           </ThemeProvider>
       </body>

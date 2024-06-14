@@ -14,6 +14,11 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer"
 import { Column, ColumnDef } from "@tanstack/react-table"
+import { useAppState } from "@/lib/providers/state-provider"
+import NewMatrix from "../vif/page"
+import MatrixOfTrades from "../trades-matrix/page";
+import SwapBox from "../swapbox"
+import { Input } from "../ui/input"
 
 const data = [
   {
@@ -73,6 +78,8 @@ export const Modal:React.FC<ModalProps> = ({
   const [goal, setGoal] = React.useState(350)
   console.log("test from inside the modal: ",test)
 
+  const {selectedTransactions} = useAppState();
+
   function onClick(adjustment: number) {
     setGoal(Math.max(200, Math.min(400, goal + adjustment)))
   }
@@ -84,7 +91,7 @@ export const Modal:React.FC<ModalProps> = ({
       </DrawerTrigger>
       <DrawerContent>
         <div className="mx-auto w-full max-w-sm">
-          <DrawerHeader>
+          {/* <DrawerHeader>
             <DrawerTitle>Move Goal</DrawerTitle>
             <DrawerDescription>Set your daily activity goal.</DrawerDescription>
           </DrawerHeader>
@@ -140,7 +147,24 @@ export const Modal:React.FC<ModalProps> = ({
             <DrawerClose asChild>
               <Button variant="outline">Cancel</Button>
             </DrawerClose>
-          </DrawerFooter>
+          </DrawerFooter> */}
+          <DrawerHeader>
+            some header
+          </DrawerHeader>
+          <DrawerClose asChild>
+            <Button variant="outline">Cancel</Button>
+          </DrawerClose>
+
+          selecrted transactions: {selectedTransactions.length}
+          {
+            selectedTransactions.map((transaction) => {
+              return <div key={transaction.id} className="flex gap-8 items-center w-[100%]">
+                <SwapBox tokenIn={transaction.token_in_symbol} tokenOut={transaction.token_out_symbol} tokenInAmount={transaction.token_in_amount} tokenOutAmount={transaction.token_out_amount}/>
+              </div>
+            })
+          }
+          {/* <NewMatrix/> */}
+          {/* <MatrixOfTrades/> */}
         </div>
       </DrawerContent>
     </Drawer>

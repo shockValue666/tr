@@ -42,15 +42,19 @@ interface AppState {
     // gambleLocal:Gamble | null;
     // cumBet:CumBet | null;
     localData:any[] | [];
+    selectedTransactions: NewCopyTradingTransaction[] | [];
 }
 
 type Action = 
     | {type:"SET_TRANS",payload:NewCopyTradingTransaction[]}
     | {type:"UPDATE_TRANS",payload:NewCopyTradingTransaction[]}
     | {type:"DELETE_TRANS",payload:NewCopyTradingTransaction[]}
+    | {type:"SET_SELECTED_TRANS",payload:NewCopyTradingTransaction[]}
+    | {type:"UPDATE_SELECTED_TRANS",payload:NewCopyTradingTransaction[]}
+    | {type:"DELETE_SELECTED_TRANS",payload:NewCopyTradingTransaction[]}
     
 
-const initialState: AppState = { localData: [] };
+const initialState: AppState = { localData: [], selectedTransactions: [] };
 
 const appReducer = (
     state: AppState = initialState,
@@ -64,7 +68,14 @@ const appReducer = (
             return { ...state, localData:action.payload };
         case "DELETE_TRANS":
             return { ...state, localData: action.payload };
-        
+
+        case "SET_SELECTED_TRANS":
+            return { ...state, selectedTransactions: action.payload };
+        case "UPDATE_SELECTED_TRANS":
+            return { ...state, selectedTransactions: action.payload };
+        case "DELETE_SELECTED_TRANS":
+            return { ...state, selectedTransactions: action.payload };
+
         default:
             return state;
     }
@@ -75,6 +86,7 @@ const AppStateContext = createContext<
       state: AppState;
       dispatch: Dispatch<Action>;
       localData: NewCopyTradingTransaction[] | [];
+      selectedTransactions: NewCopyTradingTransaction[] | []; 
     }
   | undefined
 >(undefined);
@@ -107,6 +119,10 @@ const AppStateProvider: React.FC<AppStateProviderProps> = ({ children }) => {
     const usLocalData= useMemo(()=>{
       return state.localData
     },[state])
+
+    const usLocalSelectedTransaction = useMemo(()=>{
+      return state.selectedTransactions
+    },[state])
     
     useEffect(() => {
       console.log("state from useEffect: ",state)
@@ -128,21 +144,21 @@ const AppStateProvider: React.FC<AppStateProviderProps> = ({ children }) => {
           type: 'SET_TRANS',
           payload: { ...data },
         });
-        const channel = supabase.channel('new_copy_trading_transaction')
-        .on(
-          'postgres_changes', 
-            {event:"*",schema:"public",table:"new_copy_trading_transaction"} ,
-            (payload) => {
-                // console.log("updating inside the state provider, : ",payload)
-                // console.log("something from here ig ",payload, 'localData', localData, 'typeof localData', typeof localData)
-                // setData(prevData => prevData ? [...prevData, payload.new] : [payload.new]);
-                dispatch({
-                type:"UPDATE_TRANS",
-                payload: {...data, ...payload.new as NewCopyTradingTransaction[]}
-                })
-            }
-        ).subscribe();
-        console.log("channel", channel)
+        // const channel = supabase.channel('new_copy_trading_transaction')
+        // .on(
+        //   'postgres_changes', 
+        //     {event:"*",schema:"public",table:"new_copy_trading_transaction"} ,
+        //     (payload) => {
+        //         // console.log("updating inside the state provider, : ",payload)
+        //         // console.log("something from here ig ",payload, 'localData', localData, 'typeof localData', typeof localData)
+        //         // setData(prevData => prevData ? [...prevData, payload.new] : [payload.new]);
+        //         dispatch({
+        //         type:"UPDATE_TRANS",
+        //         payload: {...data, ...payload.new as NewCopyTradingTransaction[]}
+        //         })
+        //     }
+        // ).subscribe();
+        // console.log("channel", channel)
       };
       fetchProfile();
     }, [supabase]);//fetch the files when the folderId or the workspaceId changes
@@ -154,7 +170,7 @@ const AppStateProvider: React.FC<AppStateProviderProps> = ({ children }) => {
   
     return (
       <AppStateContext.Provider
-        value={{ state, dispatch, localData: usLocalData}}
+        value={{ state, dispatch, localData: usLocalData, selectedTransactions: usLocalSelectedTransaction }}
       >
         {children}
       </AppStateContext.Provider>
