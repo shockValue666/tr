@@ -80,50 +80,9 @@ const supabase = createClientComponentClient();
   })
 
   useEffect(()=>{
-    const channel = supabase.channel("realtime posts").on('postgres_changes',{
-        event:"INSERT",
-        schema:"public",
-        table:"new_copy_trading_transaction"
-    }, async (payload) => {
-        console.log("payload: ", payload)
-        // setUpdatedData(oldData => [payload.new as TData,...oldData])
-        // const {data:newRowData,error:newRowError} = await supabase.from('new_copy_trading_transaction').select('*,new_copy_trading_addresses(*)').eq('id',payload.new.id).single()
-        const {data:newRowData,error:newRowError} = await supabase.from('new_copy_trading_transaction').select('*,new_copy_trading_addresses(*),new_copy_trading_coins_of_owners(*)').eq('id',payload.new.id).single()
-        if(newRowData){
-            console.log("newrowdata: ", newRowData)
-            setUpdatedData(oldData => [newRowData as TData,...oldData])
-        }else{
-            console.log("error trying to fetch the new row from data-table.tsx", newRowError)
-        }
-    }).subscribe()
-
-    return () => {
-        supabase.removeChannel(channel)
-    }
-  },[supabase])
-
-  useEffect(()=>{
     console.log("data: ",data)
   },[data])
 
-//   useEffect(()=>{
-
-
-//     const fetchDataInitial = async () => {
-//         const {data, error} = await supabase.from('new_copy_trading_transaction')
-//             .select('*')
-//             .order('created_at', { ascending: false })
-//             .limit(200);
-//         if(error || !data){
-//             console.log("error", error)
-//         }
-//         if(data){
-//             // console.log("data from my huge cock",data)
-//             return data;
-//         }
-//     }
-//     fetchDataInitial();
-//   },[])
 
   return (
     <div>
@@ -131,7 +90,6 @@ const supabase = createClientComponentClient();
         <div className="flex-1 text-sm text-muted-foreground">
             {table.getFilteredSelectedRowModel().rows.length} of{" "}
             {table.getFilteredRowModel().rows.length} row(s) selected.
-
         </div>
         <div className="flex items-center py-4">
             <Input
@@ -142,17 +100,12 @@ const supabase = createClientComponentClient();
             }
             className="max-w-sm"
             />
-            <Button variant="outline" className="">
-                More Columns there
-            </Button>
 
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <div className="ml-auto">
-                        <Button variant="outline" className="ml-auto">
-                        Columns here
-                        </Button>
-                    </div>
+                    <Button variant="outline" className="ml-auto">
+                    Columns
+                    </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                     {table
@@ -178,7 +131,6 @@ const supabase = createClientComponentClient();
             </DropdownMenu>
         </div>
         <div className="rounded-md border">
-            here bitch
             <Table>
                 <TableHeader>
                 {table.getHeaderGroups().map((headerGroup) => (

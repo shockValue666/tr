@@ -1,0 +1,1 @@
+export const columnHeaderTextStyle: string = "text-white uppercase text-xs whitespace-nowrap font-bold";

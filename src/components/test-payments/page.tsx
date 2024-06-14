@@ -1,8 +1,8 @@
-
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 import { Payment, columns } from "./columns"
 import { DataTable } from "./data-table"
 import {cookies} from 'next/headers'
+
 
 async function getData(): Promise<any[]> {
   // Fetch data from your API here.
@@ -47,8 +47,8 @@ async function getData(): Promise<any[]> {
       console.log("error", error)
       return []
   }else if(data){
-      // console.log("data from cock: ",data)
-      console.log("data found")
+      // console.log("data from my cock: ",data)
+      // console.log("data found")
       return data;
   }else{
     console.log("some other error");

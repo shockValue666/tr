@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/lib/providers/next-theme-provider";
 import { TransactionContextProvider } from "@/lib/providers/transaction-context-provider";
 import AppStateProvider from "@/lib/providers/state-provider";
 import { Analytics } from "@vercel/analytics/react"
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,7 +25,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <ThemeProvider
             attribute="class"
-            defaultTheme="system"
+            defaultTheme="dark" //or system probably, seems more stable
             enableSystem
             disableTransitionOnChange
           >
@@ -33,6 +34,7 @@ export default function RootLayout({
               {/* <AppStateProvider> */}
                 {children}
                 <Analytics />
+                <Toaster/>
               {/* </AppStateProvider> */}
             </TransactionContextProvider>
           </ThemeProvider>
