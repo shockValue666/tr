@@ -35,7 +35,6 @@ import {
 import { useEffect, useState } from "react"
 import { columnHeaderTextStyle } from "@/lib/constants"
 import { Modal } from "../modal/modal";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 // import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 
 interface DataTableProps<TData, TValue> {
@@ -87,33 +86,6 @@ export function DataTable<TData, TValue>({
         console.log("data: ", data)
     }, [data])
 
-    const supabase = createClientComponentClient();
-
-    useEffect(()=>{
-    const channel = supabase.channel("realtime posts").on('postgres_changes',{
-        event:"INSERT",
-        schema:"public",
-        table:"new_copy_trading_transaction"
-    }, async (payload) => {
-        console.log("payload: ", payload)
-        // setUpdatedData(oldData => [payload.new as TData,...oldData])
-        // const {data:newRowData,error:newRowError} = await supabase.from('new_copy_trading_transaction').select('*,new_copy_trading_addresses(*)').eq('id',payload.new.id).single()
-        const {data:newRowData,error:newRowError} = await supabase.from('new_copy_trading_transaction').select('*,new_copy_trading_addresses(*),new_copy_trading_coins_of_owners(*)').eq('id',payload.new.id).single()
-        if(newRowData){
-            console.log("newrowdata: ", newRowData)
-            setUpdatedData(oldData => [newRowData as TData,...oldData])
-        }else{
-            console.log("error trying to fetch the new row from data-table.tsx", newRowError)
-        }
-    }).subscribe()
-
-    return () => {
-        supabase.removeChannel(channel)
-    }
-  },[supabase])
-
-
-    const [selectRows, setSelectRows] = useState<any[]>([])
 
     return (
         <div>

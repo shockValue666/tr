@@ -7,6 +7,7 @@ import { TransactionContextProvider } from "@/lib/providers/transaction-context-
 import AppStateProvider from "@/lib/providers/state-provider";
 import { Analytics } from "@vercel/analytics/react"
 import { Toaster } from "@/components/ui/toaster";
+import Navbar from "@/components/navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -32,6 +33,7 @@ export default function RootLayout({
 
             <TransactionContextProvider>
               <AppStateProvider>
+                <Navbar/>
                 {children}
                 <Analytics />
                 <Toaster/>

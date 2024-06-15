@@ -3,6 +3,7 @@ import {DemoPage} from "@/components/payments/page";
 import RealtimePosts from "@/components/realtime-posts";
 import DemoPageNew from "@/components/test-payments/page";
 import TestPayments from "@/components/test-payments/page";
+import NewMatrix from "@/components/vif/page";
 import { useAppState } from "@/lib/providers/state-provider";
 import { useTransactions } from "@/lib/providers/transaction-context-provider";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
@@ -97,7 +98,8 @@ export default function Home() {
         {/* <DemoPage data={Object.values(localData)}/> */}
         {/* <TestPayments/> */}
         {/* <NewerDemoShit/> */}
-        <DemoPageNew/>
+        {/* <DemoPageNew/> */}
+        <NewMatrix/>
       </div>
     </main>
   );
