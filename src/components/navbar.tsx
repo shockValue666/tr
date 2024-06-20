@@ -54,7 +54,7 @@ export default function Navbar() {
                 Home
               </Link>
               <Link
-                href="#"
+                href="/leaderboard"
                 className="flex items-center gap-2 text-sm font-medium text-gray-300 hover:text-gray-50"
                 prefetch={false}
               >
@@ -62,7 +62,7 @@ export default function Navbar() {
                 Leaderboard
               </Link>
               <Link
-                href="#"
+                href="/profile"
                 className="flex items-center gap-2 text-sm font-medium text-gray-300 hover:text-gray-50"
                 prefetch={false}
               >
@@ -70,7 +70,7 @@ export default function Navbar() {
                 Profiles
               </Link>
               <Link
-                href="#"
+                href="/buy"
                 className="inline-flex items-center justify-center rounded-md bg-[#f7931a] px-4 py-2 text-sm font-medium text-gray-950 transition-colors hover:bg-[#e68b1d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931a] focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950 disabled:pointer-events-none disabled:opacity-50"
                 prefetch={false}
               >
