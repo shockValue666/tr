@@ -9,6 +9,8 @@ import { useTransactions } from "@/lib/providers/transaction-context-provider";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import db from '../../lib/supabase/db';
+db;
 
 export type NewCopyTradingTransaction = {
     id:string;

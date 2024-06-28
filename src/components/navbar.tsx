@@ -46,7 +46,7 @@ export default function Navbar() {
           <SheetContent side="right" className="bg-gray-950 px-4 py-6">
             <div className="grid gap-4">
               <Link
-                href="#"
+                href="/"
                 className="flex items-center gap-2 text-sm font-medium text-gray-300 hover:text-gray-50"
                 prefetch={false}
               >

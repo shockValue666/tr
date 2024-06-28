@@ -7,7 +7,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { FaArrowAltCircleRight, FaArrowCircleRight } from "react-icons/fa";
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
-import { timeAgo } from "@/lib/utils"
+import { numberWithCommas, timeAgo } from "@/lib/utils"
 import Image from 'next/image'
 
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "../../ui/tooltip"
@@ -165,7 +165,7 @@ export const columns: ColumnDef<any>[] = [
       // console.log("rrrroooowwwww: ",row.original.new_copy_trading_addresses.description)
       // console.log("rrrrowwwww: ",row.getValue("swapper_description"))
       return (
-        <div className="text-base md:text-md text-center">{row.getValue("pnl")}</div>
+        <div className="text-base md:text-md text-center">{numberWithCommas(parseFloat(parseFloat(row.getValue("pnl")).toFixed(2)))}$</div>
       )
     }
   },

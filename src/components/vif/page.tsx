@@ -7,30 +7,7 @@ import { Modal } from '../modal/modal';
 // import { getDataTwo } from "@/lib/constants";
 
 async function getData(): Promise<any[]> {
-    // Fetch data from your API here.
-    // return [
-    //   {
-    //     id: "728ed52f",
-    //     amount: 100,
-    //     status: "pending",
-    //     email: "m@example.com",
-    //   },
-    //   // ...
-    // ]
     const supabase = createServerComponentClient({cookies})
-    // const {data,error} = await supabase.from('new_copy_trading_transaction')
-    //                             .select('*')
-    //                             .order('created_at', { ascending: false })
-    //                             .limit(200);
-    // const { data, error } = await supabase
-    //                                 .from('new_copy_trading_transaction')
-    //                                 .select(`
-    //                                   *,
-    //                                   new_copy_trading_addresses ( swapper_description )
-    //                                 `)
-    //                                 .eq('new_copy_trading_addresses.swapper_address', 'new_copy_trading_transaction.swapper_address')
-    //                                 .order('created_at', { ascending: false })
-    //                                 .limit(200);
     const { data, error } = await supabase
     .from('new_copy_trading_transaction')
     .select(`
@@ -44,16 +21,16 @@ async function getData(): Promise<any[]> {
     `)
     // .eq('new_copy_trading_transaction.swapperAddressId', 'new_copy_trading_addresses.id')
     .order('created_at', { ascending: false })
-    .limit(200);
+    .limit(50);
     if(error || !data){
-        console.log("error", error)
+        console.log("error at newmatrix bitch", error)
         return []
     }else if(data){
         // console.log("data from my cock: ",data)
         // console.log("data found")
         return data;
     }else{
-        console.log("some other error");
+        console.log("some other error at nwe matrix bitch");
         return []
     }
 }
