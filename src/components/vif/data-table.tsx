@@ -293,14 +293,19 @@ export function DataTable<TData, TValue>({
                                 <TableRow
                                     key={row.id}
                                     data-state={row.getIsSelected() && "selected"}
-                                    className="bg-gray-dark"
+                                    // className="bg-gray-dark"
+
+                                    className={`${row.getValue("token_in_symbol") === "SOL" ? "bg-[#388E3C]" : "bg-[#D32F2F]"} `}
                                 >
-                                    {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id}
-                                            className={`truncate whitespace-nowrap ${(columnPinning.left && columnPinning.left[0] === cell.column.id) ? 'sticky left-0 z-10 bg-gray-900 px-5 max-w-32' : 'max-w-40'}`}>
-                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                        </TableCell>
-                                    ))}
+                                    {row.getVisibleCells().map((cell) => {
+                                        // console.log("cell",row.getValue("token_in_symbol"))
+                                        return(
+                                            <TableCell key={cell.id}
+                                                className={`truncate whitespace-nowrap ${(columnPinning.left && columnPinning.left[0] === cell.column.id) ? 'sticky left-0 z-10 bg-gray-900 px-5 max-w-32' : 'max-w-40'}`}>
+                                            {   flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                            </TableCell>
+                                        )
+                                    })}
                                 </TableRow>
                             ))
                         ) : (
